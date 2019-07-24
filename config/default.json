@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://jayden123:jayden123@getmoreonlinereviews-mmflq.mongodb.net/test?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://jayden123:jayden123@getmoreonlinereviews-mmflq.mongodb.net/test?retryWrites=true&w=majority",
+    "jwtSecret": "mysecrettoken"
 }
