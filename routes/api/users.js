@@ -2,22 +2,24 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 
-const { check, validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator/check');
 
 const User = require('../../models/User');
 
 // @route   POST api/users
 // @desc    Register User
 // @access  Public
-router.post('/', [
-    check('name', 'Name is required')
-        .not()
-        .isEmpty(),
-    check('email', 'Please use a valid email').isEmail(),
-    check(
-        'password',
-        'Please enter a password with 6 characters or more'
-    ).isLength({ min: 6 })
+router.post(
+    '/',
+    [
+        check('name', 'Name is required')
+            .not()
+            .isEmpty(),
+        check('email', 'Please use a valid email').isEmail(),
+        check(
+            'password',
+            'Please enter a password with 6 characters or more'
+        ).isLength({ min: 6 })
     ],
     async (req, res) => {
         const errors = validationResult(req);
@@ -31,7 +33,9 @@ router.post('/', [
             let user = await User.findOne({ email });
 
             if(user) {
-                res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+                return res
+                .status(400)
+                .json({ errors: [{ msg: 'User already exists' }] });
             }
 
             user = new User({
@@ -40,7 +44,7 @@ router.post('/', [
                 password
             });
 
-            const salt = await bcrpty.genSalt(10);
+            const salt = await bcrypt.genSalt(10);
 
             user.password = await bcrypt.hash(password, salt);
 
